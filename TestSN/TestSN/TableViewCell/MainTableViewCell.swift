@@ -33,21 +33,17 @@ class MainTableViewCell: UITableViewCell {
         
         previewText.numberOfLines = defaultNumberOfLines
         title.numberOfLines = 1
-        
-        if previewText.getAmountOfLines() <= defaultNumberOfLines {
-            expandButton.isHidden = true
-        }
     }
 
     @IBAction func expandButtonPressed(_ sender: UIButton) {
         let table = self.superview as! UITableView
-        table.beginUpdates()
         
+        table.beginUpdates()
         if previewText.numberOfLines == defaultNumberOfLines && title.getAmountOfLines() > 1 {
             previewText.numberOfLines = 0
             title.numberOfLines = 0
             sender.setTitle("Collapse", for: .normal)
-        }else if previewText.numberOfLines == defaultNumberOfLines && title.getAmountOfLines() <= 1{
+        }else if previewText.numberOfLines == defaultNumberOfLines && title.getAmountOfLines() <= 1 {
             previewText.numberOfLines = 0
             sender.setTitle("Collapse", for: .normal)
         }else {
@@ -55,9 +51,9 @@ class MainTableViewCell: UITableViewCell {
             title.numberOfLines = 1
             sender.setTitle("Expand", for: .normal)
         }
-        
         table.endUpdates()
     }
+    
 }
 
 extension UILabel {
