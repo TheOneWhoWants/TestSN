@@ -9,7 +9,7 @@ import UIKit
 
 class MainVC: UIViewController {
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet var sortMenu: UIStackView!
     @IBOutlet var tableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var tableViewTrailingConstraint: NSLayoutConstraint!
@@ -19,8 +19,6 @@ class MainVC: UIViewController {
     
     var json: Posts?
     var jsonData: [PostData] = []
-    var sortedByDate: [PostData] = []
-    var sortedByRating: [PostData] = []
     var sortItemsViewIsHidden = true
     var sortedByDateValue = false
     var sortedByRatingValue = false
@@ -43,38 +41,41 @@ class MainVC: UIViewController {
 
     }
     
-    @IBAction func sortByDatePressed(_ sender: UIButton) {
-        if !sortedByDateValue {
-            guard let json = json else {return}
-            
-            for i in 0...json.posts.count-1 {
-                sortedByDate.append(json.posts[i])
+    func getJSON(completed: @escaping () -> ()) {
+        let url = URL(string: "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json")
+        URLSession.shared.dataTask(with: url!) { data, response, error in
+            if error == nil {
+                let decoder = JSONDecoder()
+                do {
+                    self.json = try decoder.decode(Posts.self, from: data!)
+                    guard let json = self.json else {return}
+                    self.jsonData = json.posts
+                    DispatchQueue.main.async {
+                        completed()
+                    }
+                } catch {
+                    print(error)
+                }
             }
-            
-            sortedByDate = sortedByDate.sorted(by: {$0.timeshamp > $1.timeshamp})
-            jsonData = sortedByDate
-            sortedByDate.removeAll()
-            sortedByDateValue = true
-            sortedByRatingValue = false
+        }.resume()
+    }
+    
+    @IBAction func sortByDatePressed(_ sender: UIButton) {
+        if sortedByDateValue == false {
+            jsonData = jsonData.sorted(by: {$0.timeshamp > $1.timeshamp})
         }
+        sortedByRatingValue = false
+        sortedByDateValue = true
         filterButtonPressed(sender)
         tableView.reloadData()
     }
     
     @IBAction func sortByRatingPressed(_ sender: UIButton) {
-        if !sortedByRatingValue {
-            guard let json = json else {return}
-            
-            for i in 0...json.posts.count-1 {
-                sortedByRating.append(json.posts[i])
-            }
-            
-            sortedByRating = sortedByRating.sorted(by: {$0.likes_count > $1.likes_count})
-            jsonData = sortedByRating
-            sortedByRating.removeAll()
-            sortedByRatingValue = true
-            sortedByDateValue = false
+        if sortedByRatingValue == false {
+            jsonData = jsonData.sorted(by: {$0.likes_count > $1.likes_count})
         }
+        sortedByRatingValue = true
+        sortedByDateValue = false
         filterButtonPressed(sender)
         tableView.reloadData()
     }
@@ -99,24 +100,6 @@ class MainVC: UIViewController {
 
     }
     
-    func getJSON(completed: @escaping () -> ()) {
-        let url = URL(string: "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json")
-        URLSession.shared.dataTask(with: url!) { data, response, error in
-            if error == nil {
-                let decoder = JSONDecoder()
-                do {
-                    self.json = try decoder.decode(Posts.self, from: data!)
-                    guard let json = self.json else {return}
-                    self.jsonData = json.posts
-                    DispatchQueue.main.async {
-                        completed()
-                    }
-                } catch {
-                    print(error)
-                }
-            }
-        }.resume()
-    }
     
 }
 
