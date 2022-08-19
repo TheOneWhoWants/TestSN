@@ -113,7 +113,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
         cell.setData(data: cellData)
         
-        //saving the number of title and previewText lines that depend on the button's title text
+        //saving the number of a title and a previewText lines that depend on the button's title text
         if cell.expandButton.titleLabel?.text == "Collapse"{
             cell.previewText.numberOfLines = 0
             cell.expandButton.isHidden = false

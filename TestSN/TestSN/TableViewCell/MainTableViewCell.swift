@@ -31,8 +31,8 @@ class MainTableViewCell: UITableViewCell {
         let relativeDate = formatter.localizedString(for: exampleDate, relativeTo: Date())
         self.date.text = relativeDate
         
-        previewText.numberOfLines = defaultNumberOfLines
-        title.numberOfLines = 1
+        self.previewText.numberOfLines = self.defaultNumberOfLines
+        self.title.numberOfLines = 1
     }
 
     @IBAction func expandButtonPressed(_ sender: UIButton) {

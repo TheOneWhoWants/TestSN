@@ -1,17 +1,17 @@
 //
 //  Data.swift
-//  TestSN
+//  firstTry(shouldDeleteIt)
 //
-//  Created by Matthew  on 03.05.2022.
+//  Created by Matthew  on 26.05.2022.
 //
 
 import UIKit
 
-struct Posts: Codable {
+struct Posts: Decodable {
     let posts: [PostData]
 }
 
-struct PostData: Codable {
+struct PostData: Decodable {
     let postId: Int
     let timeshamp: Int
     let title: String
@@ -19,11 +19,11 @@ struct PostData: Codable {
     let likes_count: Int
 }
 
-struct MoreInfoJson: Codable {
+struct MoreInfoJson: Decodable {
     let post: MoreInfoData
 }
 
-struct MoreInfoData: Codable {
+struct MoreInfoData: Decodable {
     let postId: Int
     let timeshamp: Int
     let title: String
@@ -31,4 +31,3 @@ struct MoreInfoData: Codable {
     let postImage: String
     let likes_count: Int
 }
-
